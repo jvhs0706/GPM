@@ -51,7 +51,7 @@ def sample_hclwe(sigma: float, w_unnormalized: torch.Tensor, beta: float, gamma:
 if __name__ == "__main__":
     # Example usage
     sigma = 1.0
-    w_unnormalized = torch.randn(4096, dtype=torch.float64)
+    w_unnormalized = torch.randn(1 << 28, dtype=torch.float64, device=0)
     w = w_unnormalized / torch.norm(w_unnormalized, p=2, dtype=torch.float64)
     beta = 0.01
     gamma = 100.0
@@ -60,4 +60,7 @@ if __name__ == "__main__":
 
     space_along_w = (math.sqrt(2 * math.pi) * sigma) * (gamma / (beta**2 + gamma**2))
     multiplicative_factor = (r @ w) / space_along_w
-    print(multiplicative_factor) # should be close to an integer
+    # get the gpu usage
+    gpu_memory = torch.cuda.memory_allocated(0) / (1024 * 1024)  # in MB
+    print(f"GPU Memory Usage: {gpu_memory:.2f} MB")
+    print(multiplicative_factor.item()) # should be close to an integer
