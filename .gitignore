@@ -1,5 +1,2 @@
-*
-!.gitignore
-!*.py
-!environment.yml
-!*.md
+*.pdf
+__pycache__/
