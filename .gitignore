@@ -2,10 +2,10 @@
 # Don't ignore the .gitignore file itself
 !.gitignore
 # Don't ignore the python files, whether they are in the root or cifar10_models folder
-!*.py
+!**/*.py
 # Don't ignore environment.yml
 !environment.yml
 # Don't ignore README.md
-!README.md
+!**/README.md
 # Don't ignore LICENSE.txt
-!LICENSE.txt
+!**/LICENSE.txt
