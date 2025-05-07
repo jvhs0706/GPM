@@ -33,7 +33,7 @@ plt.legend()
 plt.grid(True)
 
 # Save the figure
-plt.savefig("gpm_density.pdf")
+plt.savefig("plots/gpm_density.pdf")
 
 # Also show the figure (optional)
 plt.show()

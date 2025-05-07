@@ -98,4 +98,4 @@ if __name__ == "__main__":
 
     # Save the figure
     plt.tight_layout()
-    plt.savefig('privacy_bound_gaussian.pdf', format='pdf', bbox_inches='tight')
+    plt.savefig('plots/privacy_bound_gaussian.pdf', format='pdf', bbox_inches='tight')
