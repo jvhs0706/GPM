@@ -4,7 +4,7 @@ To install the environment:
 conda env create --file=environment.yml
 ```
 
-The environment is listed as follows:
+The `environment.yml` is listed as follows:
 
 ```yaml
 name: GPM_ENV
