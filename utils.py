@@ -58,17 +58,11 @@ def GPM_disginguishing_attack(q: torch.Tensor, q_: torch.Tensor, w_unnormalized:
     w = w_unnormalized / torch.norm(w_unnormalized, p=2, dtype=torch.float64)
     space_along_w = (math.sqrt(2 * math.pi) * sigma) * (gamma / (beta**2 + gamma**2))
 
-    print("Norm,", (q_ - q).norm(p=2))
-
-    qs = torch.stack([q_, q])
+    qs = torch.stack([q, q_])
     outs = torch.stack([GPM(q, w, sigma, beta, gamma), GPM(q_, w, sigma, beta, gamma)])
 
-    print()
     diffs = qs[:, None, :] - outs[None, :, :]
     diffs_along_w = diffs @ w
-    print(diffs_along_w)
     multiples_along_w = diffs_along_w / space_along_w
-    print(multiples_along_w)
-    exit(0)
     dist_to_peaks = torch.abs(multiples_along_w - torch.round(multiples_along_w))
     return dist_to_peaks
