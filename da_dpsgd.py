@@ -6,7 +6,6 @@ from utils import sample_hclwe
 import argparse
 
 from cifar10_models import all_classifiers
-from cifar10_models.vgg import vgg19_bn
 from cifar10_dataset.data import CIFAR10Data
 
 def clipped_gradient(model, sample, clip_norm):
@@ -56,24 +55,27 @@ def clipped_gradient_neighbouring_batch(model, batch, clip_norm):
     return the average clipped gradient, as a dictionary with the keys of the model parameters
     '''
 
-    avg_grad_dict = clipped_gradient(model, batch[0], clip_norm)
-    avg_grad_dict_ = clipped_gradient(model, batch[1], clip_norm)
+    images, labels = batch
+    batch_size = images.size(0) - 1
 
-    for i in range(2, len(batch)):
-        grad_dict = clipped_gradient(model, batch[i], clip_norm)
+    avg_grad_dict = clipped_gradient(model, (images[None, 0], labels[None, 0]), clip_norm)
+    avg_grad_dict_ = clipped_gradient(model, (images[None, 1], labels[None, 1]), clip_norm)
+
+    for i in range(2, batch_size + 1):
+        grad_dict = clipped_gradient(model, (images[None, i], labels[None, i]), clip_norm)
         for name, grad in grad_dict.items():
             avg_grad_dict[name] += grad
             avg_grad_dict_[name] += grad
     
     for name, grad in avg_grad_dict.items():
-        avg_grad_dict[name] /= (len(batch) - 1)
-        avg_grad_dict_[name] /= (len(batch) - 1)
+        avg_grad_dict[name] /= batch_size
+        avg_grad_dict_[name] /= batch_size
 
     return avg_grad_dict, avg_grad_dict_
 
 parser = argparse.ArgumentParser(description='Distinguishing attacks against DP-SGD')
-parser.add_argument('--model', type=str, required=True, help='Model to use for the attack')
-parser.add_argument('--pretrained', type=bool, action='store_true', help='Use pretrained model')
+parser.add_argument('--model', type=str, choices = list(all_classifiers.keys()), required=True, help='Model to use for the attack')
+parser.add_argument('--pretrained', action='store_true', help='Use pretrained model')
 parser.add_argument('--sigma', type=float, required=True, help='Standard deviation of the noise')
 parser.add_argument('--beta', type=float, required=True, help='Beta parameter for the noise')
 parser.add_argument('--gamma', type=float, required=True, help='Gamma parameter for the noise')
@@ -87,9 +89,38 @@ args = parser.parse_args()
 if __name__ == "__main__":
     args = parser.parse_args()
 
-    model = all_classifiers[args.model](device = torch.device(0), pretrained=args.pretrained)
+    model = all_classifiers[args.model](pretrained=args.pretrained)
     model.to(torch.device(0))
     data = CIFAR10Data(batch_size=args.batch_size + 1, num_workers=args.num_workers)
     train_loader = data.train_dataloader()
     val_loader = data.val_dataloader()
     test_loader = data.test_dataloader()
+
+    # Get the number of parameters in the model
+    num_params = sum(p.numel() for p in model.parameters())
+    print(f"Number of parameters in the model: {num_params}")
+
+    # Get the model accuracy before performing the attack 
+    # Set model to evaluation mode
+    model.eval()
+
+    correct = 0
+    total = 0
+
+    # Make sure no gradients are computed (faster and uses less memory)
+    with torch.no_grad():
+        for images, labels in test_loader:
+            images, labels = images.cuda(), labels.cuda()
+            outputs = model(images)
+            _, predicted = torch.max(outputs, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+
+    accuracy = 100 * correct / total
+    print(f"Test Accuracy: {accuracy:.2f}%")
+
+    # Get the first batch of data
+    batch = next(iter(train_loader))
+
+    # Compute the gradients
+    grad_dict, grad_dict_ = clipped_gradient_neighbouring_batch(model, batch, args.clip_norm)
