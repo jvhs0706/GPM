@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from utils import sample_hclwe
+from utils import *
 import argparse
 
 from cifar10_models import all_classifiers
@@ -44,7 +44,7 @@ def clipped_gradient(model, sample, clip_norm):
             if grad_norm > clip_norm:
                 param.grad.data.mul_(clip_norm / grad_norm)
             # Store the clipped gradient
-            grad_dict[name] = param.grad.data.clone()
+            grad_dict[name] = param.grad.data.clone().reshape(-1)
 
     return grad_dict
 
@@ -58,8 +58,19 @@ def clipped_gradient_neighbouring_batch(model, batch, clip_norm):
     images, labels = batch
     batch_size = images.size(0) - 1
 
+    print(images[0])
+    print(images[1])
+
     avg_grad_dict = clipped_gradient(model, (images[None, 0], labels[None, 0]), clip_norm)
     avg_grad_dict_ = clipped_gradient(model, (images[None, 1], labels[None, 1]), clip_norm)
+
+    # print the l2 difference between the two gradients
+    for name, grad in avg_grad_dict.items():
+        avg_grad_dict[name] = grad.view(-1)
+        avg_grad_dict_[name] = grad.view(-1)
+        print(name, avg_grad_dict[name].norm(p=2))
+        print(name, avg_grad_dict_[name].norm(p=2))
+        print(name, (avg_grad_dict_[name] - avg_grad_dict[name]).norm(p=2))
 
     for i in range(2, batch_size + 1):
         grad_dict = clipped_gradient(model, (images[None, i], labels[None, i]), clip_norm)
@@ -91,6 +102,13 @@ if __name__ == "__main__":
 
     model = all_classifiers[args.model](pretrained=args.pretrained)
     model.to(torch.device(0))
+
+    w_unnormalized_dict = {}
+    for name, param in model.named_parameters():
+        if 'weight' in name:
+            # randn tensor with the same length but 1D
+            w_unnormalized_dict[name] = torch.randn(param.numel(), dtype=torch.float64, device=param.device)
+
     data = CIFAR10Data(batch_size=args.batch_size + 1, num_workers=args.num_workers)
     train_loader = data.train_dataloader()
     val_loader = data.val_dataloader()
@@ -124,3 +142,11 @@ if __name__ == "__main__":
 
     # Compute the gradients
     grad_dict, grad_dict_ = clipped_gradient_neighbouring_batch(model, batch, args.clip_norm)
+
+    for name, grad in grad_dict.items():
+        # check the w exists for the name
+        grad_ = grad_dict_[name]
+        # print(grad - grad_)
+        if name not in w_unnormalized_dict:
+            continue
+        #print(GPM_disginguishing_attack(grad, grad_, w_unnormalized_dict[name], args.sigma, args.beta, args.gamma))

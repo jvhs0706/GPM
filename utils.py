@@ -48,19 +48,27 @@ def sample_hclwe(sigma: float, w_unnormalized: torch.Tensor, beta: float, gamma:
     
     return v_slice + mu
 
-if __name__ == "__main__":
-    # Example usage
-    sigma = 1.0
-    w_unnormalized = torch.randn(1 << 28, dtype=torch.float64, device=0)
+@torch.no_grad()
+def GPM(q: torch.Tensor, w: torch.Tensor, sigma: float, beta: float, gamma: float):
+    assert q.ndim == 1 and q.numel() == w.numel(), "q and w must be 1D tensors of the same size."
+    return q + sample_hclwe(sigma, w, beta, gamma)
+
+@torch.no_grad()
+def GPM_disginguishing_attack(q: torch.Tensor, q_: torch.Tensor, w_unnormalized: torch.Tensor, sigma: float, beta: float, gamma: float):
     w = w_unnormalized / torch.norm(w_unnormalized, p=2, dtype=torch.float64)
-    beta = 0.01
-    gamma = 100.0
-
-    r = sample_hclwe(sigma, w, beta, gamma)
-
     space_along_w = (math.sqrt(2 * math.pi) * sigma) * (gamma / (beta**2 + gamma**2))
-    multiplicative_factor = (r @ w) / space_along_w
-    # get the gpu usage
-    gpu_memory = torch.cuda.memory_allocated(0) / (1024 * 1024)  # in MB
-    print(f"GPU Memory Usage: {gpu_memory:.2f} MB")
-    print(multiplicative_factor.item()) # should be close to an integer
+
+    print("Norm,", (q_ - q).norm(p=2))
+
+    qs = torch.stack([q_, q])
+    outs = torch.stack([GPM(q, w, sigma, beta, gamma), GPM(q_, w, sigma, beta, gamma)])
+
+    print()
+    diffs = qs[:, None, :] - outs[None, :, :]
+    diffs_along_w = diffs @ w
+    print(diffs_along_w)
+    multiples_along_w = diffs_along_w / space_along_w
+    print(multiples_along_w)
+    exit(0)
+    dist_to_peaks = torch.abs(multiples_along_w - torch.round(multiples_along_w))
+    return dist_to_peaks
