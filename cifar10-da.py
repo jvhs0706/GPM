@@ -82,6 +82,8 @@ parser.add_argument('--gamma', type=float, required=True, help='Gamma parameter 
 parser.add_argument('--clip_norm', type=float, required=True, help='Clipping norm for the gradients')
 parser.add_argument('--batch_size', type=int, required=True, help='Batch size for the data loader')
 parser.add_argument('--num_workers', type=int, default=4, help='Number of workers for the data loader')
+parser.add_argument('--repeat', type=int, default=1, help='Number of times to repeat the attack')
+parser.add_argument('--success_threshold', type=float, default=0.5, help='Success threshold for the attack')
 args = parser.parse_args()
 
 
@@ -99,20 +101,17 @@ if __name__ == "__main__":
             w_unnormalized_dict[name] = torch.randn(param.numel(), dtype=torch.float64, device=param.device)
 
     data = CIFAR10Data(batch_size=args.batch_size + 1, num_workers=args.num_workers)
-    train_loader = data.train_dataloader()
-    val_loader = data.val_dataloader()
+    
     test_loader = data.test_dataloader()
 
     # Get the number of parameters in the model
     num_params = sum(p.numel() for p in model.parameters())
-    print(f"Number of parameters in the model: {num_params}")
 
     # Get the model accuracy before performing the attack 
     # Set model to evaluation mode
     model.eval()
 
-    correct = 0
-    total = 0
+    correct, total = 0, 0
 
     # Make sure no gradients are computed (faster and uses less memory)
     with torch.no_grad():
@@ -123,23 +122,31 @@ if __name__ == "__main__":
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
 
-    accuracy = 100 * correct / total
-    print(f"Test Accuracy: {accuracy:.2f}%")
+    accuracy = correct / total
 
-    # Get the first batch of data
-    batch = next(iter(train_loader))
+    success = 0
 
-    # Compute the gradients
-    grad_dict, grad_dict_ = clipped_gradient_neighbouring_batch(model, batch, args.clip_norm)
+    for i in range(args.repeat):
+        # Get the first batch of data
+        train_loader = data.train_dataloader()
+        batch = next(iter(train_loader))
 
-    success, total = 0, 0
+        # Compute the gradients
+        grad_dict, grad_dict_ = clipped_gradient_neighbouring_batch(model, batch, args.clip_norm)
 
-    for name, grad in grad_dict.items():
-        # check the w exists for the name
-        grad_ = grad_dict_[name]
-        if name not in w_unnormalized_dict:
-            continue
-        total += 1
-        if torch.linalg.det(GPM_disginguishing_attack(grad, grad_, w_unnormalized_dict[name], args.sigma, args.beta, args.gamma)).item() < 0:
+        weight_success, weight_count = 0, 0
+
+        for name, grad in grad_dict.items():
+            # check the w exists for the name
+            grad_ = grad_dict_[name]
+            if name not in w_unnormalized_dict:
+                continue
+            weight_count += 1
+            if torch.linalg.det(GPM_disginguishing_attack(grad, grad_, w_unnormalized_dict[name], args.sigma, args.beta, args.gamma)).item() < 0:
+                weight_success += 1
+            
+        if weight_success / weight_count > args.success_threshold:
             success += 1
-    print(f"Success rate: {success / total:.2f}")
+
+    success_rate = success / args.repeat
+    print(f'cifar10,{args.model},{num_params},{args.pretrained},{accuracy},{args.batch_size},{args.clip_norm},{args.beta},{args.gamma},{success_rate}')
