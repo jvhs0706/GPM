@@ -1,1 +1,0 @@
-python da_dpsgd.py --model vgg19_bn --batch_size 128 --sigma 1 --beta 0.00114514 --gamma 1000 --clip_norm 4 --pretrained

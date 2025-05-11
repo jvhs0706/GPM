@@ -12,7 +12,7 @@ echo "dataset,model,num_params,converged,acc,batch_size,clip_norm,beta,gamma,suc
 
 EXP_SCRIPT="cifar10-da.py"
 
-REPEAT=10
+REPEAT=100
 THRESHOLD=0.95
 
 
