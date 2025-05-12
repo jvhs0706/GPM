@@ -1,7 +1,7 @@
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
-from scipy.stats import norm
+from utils import *
 
 # ---- Font Size Settings ----
 plt.rcParams.update({
@@ -13,35 +13,6 @@ plt.rcParams.update({
     'legend.fontsize': 20,
     'figure.titlesize': 25
 })
-
-
-def get_comp_epsilon(sensitivity, sigma, delta):
-    """
-    Calculate the epsilon value for the Gaussian mechanism given sensitivity, sigma, and delta.
-    """
-    assert 0 < delta <= 0.5, "Delta must be in (0, 0.5]"
-    ratio = sensitivity / sigma
-    return 0.5 * ratio**2 - ratio * norm.ppf(delta)
-
-def get_pancake_epsilon_up(sensitivity, sigma, beta, gamma, delta):
-    """
-    Calculate the upper bound for epsilon using the Gaussian Pancake mechanism.
-    """
-    return get_comp_epsilon(sensitivity * (gamma / beta), sigma, delta)
-
-def get_pancake_epsilon_low(sensitivity, sigma, beta, gamma, delta):
-    """
-    Calculate the lower bound for epsilon using the Gaussian Pancake mechanism.
-    """
-    assert 0 < delta <= 0.5, "Delta must be in (0, 0.5]"
-    cdf_input = -0.25 * (gamma / beta) * np.sqrt(0.5 * np.pi / (beta**2 + gamma**2))
-    
-    # Guard against invalid log domain
-    if cdf_input >= 0:
-        return np.nan
-    
-    log_cdf = -0.5 * cdf_input**2 - np.log(-np.sqrt(0.5 * np.pi) * cdf_input)
-    return np.log(0.25 * (1 - delta)) - log_cdf
 
 def plot_comp(ax, sensitivity, sigma, beta, gamma):
     """

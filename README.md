@@ -146,3 +146,11 @@ dependencies:
       - triton==3.2.0
       - typing-extensions==4.12.2
 ```
+
+Run the distinguishing attacks:
+
+```
+chmod +x *.sh
+conda activate GPM_ENV && nohup ./mnist-da.sh > logs/mnist-da-nohup.out &
+conda activate GPM_ENV && nohup ./cifar10-da.sh > logs/cifar10-da-nohup.out &
+```
