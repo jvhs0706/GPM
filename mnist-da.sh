@@ -29,7 +29,6 @@ echo "dataset,model,num_params,converged,acc,batch_size,clip_norm,beta,gamma,sig
 EXP_SCRIPT="mnist-da.py"
 
 REPEAT=100
-THRESHOLD=0.8
 DELTA=1e-10
 
 for batch_size in 64 128 256; do

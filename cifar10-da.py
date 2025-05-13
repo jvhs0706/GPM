@@ -9,7 +9,7 @@ from cifar10_models import all_classifiers
 from cifar10_dataset.data import CIFAR10Data
 from dpsgd import *
 
-parser = argparse.ArgumentParser(description='Distinguishing attacks against DP-SGD')
+parser = argparse.ArgumentParser(description='Distinguishing attacks against DP-SGD with CIFAR10')
 parser.add_argument('--model', type=str, choices = list(all_classifiers.keys()), required=True, help='Model to use for the attack')
 parser.add_argument('--pretrained', action='store_true', help='Use pretrained model')
 parser.add_argument('--epsilon', type=float, required=True, help='Epsilon parameter for the noise')
@@ -20,9 +20,6 @@ parser.add_argument('--clip_norm', type=float, required=True, help='Clipping nor
 parser.add_argument('--batch_size', type=int, required=True, help='Batch size for the data loader')
 parser.add_argument('--num_workers', type=int, default=4, help='Number of workers for the data loader')
 parser.add_argument('--repeat', type=int, default=1, help='Number of times to repeat the attack')
-args = parser.parse_args()
-
-
 
 if __name__ == "__main__":
     args = parser.parse_args()
@@ -39,7 +36,6 @@ if __name__ == "__main__":
 
     # Get the number of parameters in the model
     num_params = sum(p.numel() for p in model.parameters())
-    w_unnormalized = torch.randn(num_params, dtype=torch.float64, device=torch.device(0))
 
     # Get the model accuracy before performing the attack 
     # Set model to evaluation mode
@@ -62,6 +58,7 @@ if __name__ == "__main__":
 
     for i in range(args.repeat):
         # Get the first batch of data
+        w_unnormalized = torch.randn(num_params, dtype=torch.float64, device=torch.device(0))
         train_loader = data.train_dataloader()
         batch = next(iter(train_loader))
 
