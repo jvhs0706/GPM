@@ -25,15 +25,14 @@ if __name__ == "__main__":
     for i in range(args.repeat):
         # Get the first batch of data
         # creata a random vector, each element has value in 0 to num_bins - 1
-        records = torch.randint(0, args.num_bins, (args.num_bins,), dtype=torch.float64, device=torch.device(0))
+        records = torch.randint(0, args.num_bins, (args.num_bins,), dtype=torch.float64)
         # get the histogram on records
-        hist = torch.histogram(records, bins=args.num_bins, range=(-0.5, args.num_bins - 0.5))[0]
-        hist_ = torch.histogram(records[:-1], bins=args.num_bins, range=(-0.5, args.num_bins - 0.5))[0]
+        hist = torch.histogram(records, bins=args.num_bins, range=(-0.5, args.num_bins - 0.5))[0].cuda()
+        hist_ = torch.histogram(records[:-1], bins=args.num_bins, range=(-0.5, args.num_bins - 0.5))[0].cuda()
         w_unnormalized = torch.randn(args.num_bins, dtype=torch.float64, device=torch.device(0))
 
-        if torch.linalg.det(GPM_disginguishing_attack(hist, hist_, w_unnormalized, args.sensitivity, args.sigma, args.beta, args.gamma)).item() < 0:
+        if torch.linalg.det(GPM_disginguishing_attack(hist, hist_, w_unnormalized, args.sigma, args.beta, args.gamma)).item() < 0:
             success += 1
 
     success_rate = success / args.repeat
-    print("Success rate: ", success_rate)
     print(f'{args.num_records},{args.num_bins},{args.beta},{args.gamma},{args.sigma},{args.epsilon},{args.actual_epsilon},{args.delta},{success_rate}')
