@@ -23,7 +23,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     args.sensitivity = args.clip_norm * 2 / args.batch_size
     args.sigma = get_sigma(args.epsilon, args.delta, args.sensitivity)
-    args.actual_epsilon = get_pancake_epsilon_low(args.sensitivity, args.sigma, args.beta, args.gamma, args.delta)
+    
 
     model = MNISTLeNet(load_weights=args.pretrained)
     model.to(torch.device(0))
@@ -39,6 +39,7 @@ if __name__ == "__main__":
         args.gamma = 2 * math.sqrt(num_params)
     elif args.gamma < 2 * math.sqrt(num_params):
         raise ValueError("Gamma must be greater than 2 * sqrt(num_params)")
+    args.actual_epsilon = get_pancake_epsilon_low(args.sensitivity, args.sigma, args.beta, args.gamma, args.delta)
 
     # Get the model accuracy before performing the attack 
     # Set model to evaluation mode
