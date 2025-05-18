@@ -35,10 +35,8 @@ DELTA=1e-10
 for num_bins in 16 64 256 1024 4096 16384 65536; do
     for eps in 0.125 0.25 0.5 1; do
         for beta in 1e-5 1e-4 1e-3; do
-            for gamma in 1e3 1e4; do
-                # Run the python script with the parameters
-                python $EXP_SCRIPT --num_records $NUM_RECORDS --num_bins $num_bins --epsilon $eps --delta $DELTA --beta $beta --gamma $gamma --repeat $REPEAT >> $LOG_FILE
-            done
+            # Run the python script with the parameters
+            python $EXP_SCRIPT --num_records $NUM_RECORDS --num_bins $num_bins --epsilon $eps --delta $DELTA --beta $beta --repeat $REPEAT >> $LOG_FILE
         done
     done
 done

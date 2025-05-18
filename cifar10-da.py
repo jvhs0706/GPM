@@ -15,7 +15,7 @@ parser.add_argument('--pretrained', action='store_true', help='Use pretrained mo
 parser.add_argument('--epsilon', type=float, required=True, help='Epsilon parameter for the noise')
 parser.add_argument('--delta', type=float, required=True, help='Delta parameter for the noise')
 parser.add_argument('--beta', type=float, required=True, help='Beta parameter for the noise')
-parser.add_argument('--gamma', type=float, required=True, help='Gamma parameter for the noise')
+parser.add_argument('--gamma', type=float, help='Gamma parameter for the noise')
 parser.add_argument('--clip_norm', type=float, required=True, help='Clipping norm for the gradients')
 parser.add_argument('--batch_size', type=int, required=True, help='Batch size for the data loader')
 parser.add_argument('--num_workers', type=int, default=4, help='Number of workers for the data loader')
@@ -36,6 +36,10 @@ if __name__ == "__main__":
 
     # Get the number of parameters in the model
     num_params = sum(p.numel() for p in model.parameters())
+    if args.gamma is None:
+        args.gamma = 2 * math.sqrt(num_params)
+    elif args.gamma < 2 * math.sqrt(num_params):
+        raise ValueError("Gamma must be greater than 2 * sqrt(num_params)")
 
     # Get the model accuracy before performing the attack 
     # Set model to evaluation mode

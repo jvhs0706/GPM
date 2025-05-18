@@ -30,17 +30,14 @@ EXP_SCRIPT="mnist-da.py"
 
 REPEAT=100
 DELTA=1e-10
+BATCH_SIZE=128
 
-for batch_size in 64 128 256; do
-    for eps in 0.125 0.25 0.5 1; do
-        for beta in 1e-5 1e-4 1e-3; do
-            for gamma in 1e3 1e4; do
-                for clip_norm in 4 8; do
-                    # Run the python script with the parameters
-                    python $EXP_SCRIPT --batch_size $batch_size --epsilon $eps --delta $DELTA --beta $beta --gamma $gamma --clip_norm $clip_norm --pretrained --repeat $REPEAT >> $LOG_FILE
-                    python $EXP_SCRIPT --batch_size $batch_size --epsilon $eps --delta $DELTA --beta $beta --gamma $gamma --clip_norm $clip_norm --repeat $REPEAT >> $LOG_FILE
-                done
-            done
+for eps in 0.125 0.25 0.5 1; do
+    for beta in 1e-5 1e-4 1e-3; do
+        for clip_norm in 4 8; do
+            # Run the python script with the parameters
+            python $EXP_SCRIPT --batch_size $batch_size --epsilon $eps --delta $DELTA --beta $beta --gamma $gamma --clip_norm $clip_norm --pretrained --repeat $REPEAT >> $LOG_FILE
+            python $EXP_SCRIPT --batch_size $batch_size --epsilon $eps --delta $DELTA --beta $beta --gamma $gamma --clip_norm $clip_norm --repeat $REPEAT >> $LOG_FILE
         done
     done
 done
