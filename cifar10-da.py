@@ -69,7 +69,7 @@ if __name__ == "__main__":
 
         grad, grad_ = clipped_gradient_neighbouring_batch(model, batch, args.clip_norm)
 
-        if torch.linalg.det(GPM_disginguishing_attack(grad, grad_, w_unnormalized, args.sigma, args.beta, args.gamma)).item() < 0:
+        if GPM_disginguishing_attack(grad, grad_, w_unnormalized, args.sigma, args.beta, args.gamma):
             success += 1
 
     success_rate = success / args.repeat

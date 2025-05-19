@@ -40,3 +40,7 @@ for num_bins in 16 64 256 1024 4096 16384 65536; do
         done
     done
 done
+
+git add $LOG_FILE
+git commit -m "Add histogram results to $LOG_FILE"
+git push

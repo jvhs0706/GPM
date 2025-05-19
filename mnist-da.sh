@@ -41,3 +41,7 @@ for eps in 0.125 0.25 0.5 1; do
         done
     done
 done
+
+git add $LOG_FILE
+git commit -m "Add mnist results to $LOG_FILE"
+git push

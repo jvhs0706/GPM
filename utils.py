@@ -3,6 +3,8 @@ import torch
 import math
 from scipy.stats import norm
 
+import random
+
 @torch.no_grad()
 def sample_hclwe(sigma: float, w_unnormalized: torch.Tensor, beta: float, gamma: float):
     # Check the input parameters
@@ -55,18 +57,26 @@ def GPM(q: torch.Tensor, w: torch.Tensor, sigma: float, beta: float, gamma: floa
     return q + sample_hclwe(sigma, w, beta, gamma)
 
 @torch.no_grad()
-def GPM_disginguishing_attack(q: torch.Tensor, q_: torch.Tensor, w_unnormalized: torch.Tensor, sigma: float, beta: float, gamma: float):
+def GPM_disginguishing_attack(q0: torch.Tensor, q1: torch.Tensor, w_unnormalized: torch.Tensor, sigma: float, beta: float, gamma: float):
     w = w_unnormalized / torch.norm(w_unnormalized, p=2, dtype=torch.float64)
     space_along_w = (math.sqrt(2 * math.pi) * sigma) * (gamma / (beta**2 + gamma**2))
 
-    qs = torch.stack([q, q_])
-    outs = torch.stack([GPM(q, w, sigma, beta, gamma), GPM(q_, w, sigma, beta, gamma)])
+    # get a random coin flip
+    b = random.randint(0, 1)
+    out = GPM(q1 if b else q0, w, sigma, beta, gamma)
 
-    diffs = qs[:, None, :] - outs[None, :, :]
+    qs = torch.stack([q0, q1])
+
+    diffs = qs - out
     diffs_along_w = diffs @ w
     multiples_along_w = diffs_along_w / space_along_w
     dist_to_peaks = torch.abs(multiples_along_w - torch.round(multiples_along_w))
-    return dist_to_peaks
+    if dist_to_peaks[0] < dist_to_peaks[1]:
+        b_hat = 0
+    else:
+        b_hat = 1
+
+    return b == b_hat
 
 def get_comp_epsilon(sensitivity, sigma, delta):
     """

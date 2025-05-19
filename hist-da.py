@@ -36,7 +36,7 @@ if __name__ == "__main__":
         hist_ = torch.histogram(records[:-1], bins=args.num_bins, range=(-0.5, args.num_bins - 0.5))[0].cuda()
         w_unnormalized = torch.randn(args.num_bins, dtype=torch.float64, device=torch.device(0))
 
-        if torch.linalg.det(GPM_disginguishing_attack(hist, hist_, w_unnormalized, args.sigma, args.beta, args.gamma)).item() < 0:
+        if GPM_disginguishing_attack(hist, hist_, w_unnormalized, args.sigma, args.beta, args.gamma):
             success += 1
 
     success_rate = success / args.repeat

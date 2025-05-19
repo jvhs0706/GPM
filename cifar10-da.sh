@@ -42,4 +42,7 @@ for model in "vgg19_bn" "resnet50" "mobilenet_v2"; do
             done
         done
     done
+    git add $LOG_FILE
+    git commit -m "Add $model results to $LOG_FILE"
+    git push
 done
