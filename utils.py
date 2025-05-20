@@ -63,7 +63,9 @@ def GPM_disginguishing_attack(q0: torch.Tensor, q1: torch.Tensor, w_unnormalized
 
     # get a random coin flip
     b = random.randint(0, 1)
-    out = GPM(q1 if b else q0, w, sigma, beta, gamma)
+    q = q1.clone() if b else q0.clone()
+    out = GPM(q, w, sigma, beta, gamma)
+    l2_error = torch.norm(out - q, p=2, dtype=torch.float64)
 
     qs = torch.stack([q0, q1])
 
@@ -76,7 +78,8 @@ def GPM_disginguishing_attack(q0: torch.Tensor, q1: torch.Tensor, w_unnormalized
     else:
         b_hat = 1
 
-    return b == b_hat
+    success = (b == b_hat)
+    return success, l2_error
 
 def get_comp_epsilon(sensitivity, sigma, delta):
     """

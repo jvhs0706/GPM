@@ -24,7 +24,7 @@ if [ -f "$LOG_FILE" ]; then
 fi
 
 # Create a new logs/hist-da.log, witt certain content
-echo "num_records,num_bins,beta,gamma,sigma,eps_comp,eps_actual,delta,success_rate" > $LOG_FILE
+echo "num_records,num_bins,beta,gamma,sigma,eps_comp,eps_actual,delta,success_rate,l2" > $LOG_FILE
 
 EXP_SCRIPT="hist-da.py"
 
@@ -32,7 +32,7 @@ NUM_RECORDS=1000000
 REPEAT=100
 DELTA=1e-10
 
-for num_bins in 16 64 256 1024 4096 16384 65536; do
+for num_bins in 256 4096 65536; do
     for eps in 0.125 0.25 0.5 1; do
         for beta in 1e-5 1e-4 1e-3 1e-2 1e-1; do
             # Run the python script with the parameters
