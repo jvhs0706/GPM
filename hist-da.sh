@@ -28,13 +28,13 @@ echo "num_records,num_bins,beta,gamma,sigma,eps_comp,eps_actual,delta,success_ra
 
 EXP_SCRIPT="hist-da.py"
 
-NUM_RECORDS=16777216
+NUM_RECORDS=1000000
 REPEAT=100
 DELTA=1e-10
 
 for num_bins in 16 64 256 1024 4096 16384 65536; do
     for eps in 0.125 0.25 0.5 1; do
-        for beta in 1e-5 1e-4 1e-3; do
+        for beta in 1e-5 1e-4 1e-3 1e-2 1e-1; do
             # Run the python script with the parameters
             python $EXP_SCRIPT --num_records $NUM_RECORDS --num_bins $num_bins --epsilon $eps --delta $DELTA --beta $beta --repeat $REPEAT >> $LOG_FILE
         done
