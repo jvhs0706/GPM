@@ -26,7 +26,7 @@ if __name__ == "__main__":
     args.actual_epsilon = get_pancake_epsilon_low(args.sensitivity, args.sigma, args.beta, args.gamma, args.delta)
 
     total_success = 0
-    mean_l2_error = 0
+    mean_l2_sq = 0
 
     for i in range(args.repeat):
         # Get the first batch of data
@@ -37,13 +37,13 @@ if __name__ == "__main__":
         hist_ = torch.histogram(records[:-1], bins=args.num_bins, range=(-0.5, args.num_bins - 0.5))[0].cuda()
         w_unnormalized = torch.randn(args.num_bins, dtype=torch.float64, device=torch.device(0))
 
-        success, l2_error = GPM_disginguishing_attack(hist, hist_, w_unnormalized, args.sigma, args.beta, args.gamma)
-        mean_l2_error += l2_error.item()
+        success, l2_error = GPM_disginguishing_attack(hist, hist_, w_unnormalized, args.sigma, args.beta, args.gamma, l2 = True)
+        mean_l2_sq += l2_error.item()**2
 
         if success:
             total_success += 1
 
-    mean_l2_error /= args.repeat
+    mean_l2_sq /= args.repeat
 
     success_rate = total_success / args.repeat
-    print(f'{args.num_records},{args.num_bins},{args.beta},{args.gamma},{args.sigma},{args.epsilon},{args.actual_epsilon},{args.delta},{success_rate},{mean_l2_error}')
+    print(f'{args.num_records},{args.num_bins},{args.beta},{args.gamma},{args.sigma},{args.epsilon},{args.actual_epsilon},{args.delta},{success_rate},{math.sqrt(mean_l2_sq)}')

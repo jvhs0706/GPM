@@ -3,6 +3,9 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from utils import *
 
+sns.set_palette('bright')  # or 'deep', 'bright', etc.
+sns.set_style('whitegrid')  # or 'darkgrid', 'white', 'dark', etc.
+
 # ---- Font Size Settings ----
 plt.rcParams.update({
     'font.size': 15,            # base font size
@@ -28,9 +31,9 @@ def plot_comp(ax, sensitivity, sigma, beta, gamma):
         pancake_epsilon_lbs[i] = get_pancake_epsilon_low(sensitivity, sigma, beta, gamma, delta)
         pancake_epsilon_ubs[i] = get_pancake_epsilon_up(sensitivity, sigma, beta, gamma, delta)
 
-    sns.lineplot(x=delta_vals, y=comp_epsilon_vals, label='GM Upper Bound', ax=ax, linestyle='-', linewidth=2)
-    sns.lineplot(x=delta_vals, y=pancake_epsilon_lbs, label='GPM Lower Bound', ax=ax, linestyle='--', linewidth=2)
-    sns.lineplot(x=delta_vals, y=pancake_epsilon_ubs, label='GPM Upper Bound', ax=ax, linestyle=':', linewidth=2)
+    sns.lineplot(x=delta_vals, y=comp_epsilon_vals, label='GM Upper Bound', ax=ax, linestyle='-', linewidth=5)
+    sns.lineplot(x=delta_vals, y=pancake_epsilon_lbs, label='GPM Lower Bound', ax=ax, linestyle='--', linewidth=5)
+    sns.lineplot(x=delta_vals, y=pancake_epsilon_ubs, label='GPM Upper Bound', ax=ax, linestyle=':', linewidth=5)
 
     
     ax.set_xscale('log')
@@ -46,12 +49,12 @@ if __name__ == "__main__":
     # Set parameters
     sensitivity = 1
     sigma_list = [1, 4, 16, 64, 256]
-    beta_list = ['1e-3', '1e-4', '1e-5']
+    beta_list = ['1e-3', '1e-5']
     gamma_list = ['1e2', '1e4']
     beta_gamma_pairs = [(beta, gamma) for beta in beta_list for gamma in gamma_list]
 
     # Create subplots
-    fig, axs = plt.subplots(6, 5, figsize=(24, 18), sharex=True, sharey=True)
+    fig, axs = plt.subplots(4, 5, figsize=(24, 13), sharex=True, sharey=True)
 
     for i, (beta, gamma) in enumerate(beta_gamma_pairs):
         for j, sigma in enumerate(sigma_list):
@@ -65,7 +68,7 @@ if __name__ == "__main__":
 
     # Add global legend
     handles, labels = axs[0, 0].get_legend_handles_labels()
-    fig.legend(handles, labels, loc='lower center', ncol=3, bbox_to_anchor=(0.5, -0.02))
+    fig.legend(handles, labels, loc='lower center', ncol=3, bbox_to_anchor=(0.5, -0.03))
 
     # Save the figure
     plt.tight_layout()

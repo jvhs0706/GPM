@@ -57,7 +57,6 @@ if __name__ == "__main__":
             correct += (predicted == labels).sum().item()
 
     accuracy = correct / total
-
     success = 0
 
     for i in range(args.repeat):

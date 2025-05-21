@@ -29,6 +29,7 @@ def plot_success_rate(ax, df, num_bins):
     ax.set_xscale('log')
     ax.set_xlabel(r'$\beta$')
     ax.set_ylabel('Success Rate')
+    ax.set_title(f'$d={num_bins}$')
     ax.get_legend().remove()  # Remove individual legends
 
 if __name__ == '__main__':
