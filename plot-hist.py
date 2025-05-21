@@ -20,7 +20,7 @@ sns.set_style('whitegrid')  # or 'darkgrid', 'white', 'dark', etc.
 
 
 def plot_success_rate(ax, df, num_bins):
-    df_ = df[df['num_bins'] == num_bins]
+    df_ = df[df['num_bins'] == num_bins].copy()
 
     line = sns.lineplot(
         x='beta', y='success_rate', data=df_, ax=ax,
@@ -31,27 +31,10 @@ def plot_success_rate(ax, df, num_bins):
     ax.set_ylabel('Success Rate')
     ax.get_legend().remove()  # Remove individual legends
 
-def plot_l2(ax, df, num_bins):
-    df_ = df[df['num_bins'] == num_bins].copy()
-    df_['l2_theoretical'] = np.sqrt(df_['num_bins']) * df_['sigma']
-
-    sns.lineplot(
-        x='eps_comp', y='l2_theoretical', data=df_, ax=ax,
-        linestyle='--', linewidth=2, label='Theoretical'
-    )
-    sns.lineplot(
-        x='eps_comp', y='l2', data=df_, ax=ax,
-        linestyle='-', linewidth=2, label='Actual'
-    )
-    ax.set_xscale('log')
-    ax.set_xlabel(r'$\epsilon^*$')
-    ax.set_ylabel('L2 Error')
-    ax.get_legend().remove()  # Remove individual legends
-
 if __name__ == '__main__':
     df = pd.read_csv('logs/hist-da.csv')
 
-    fig, axs = plt.subplots(1, 3, figsize=(16, 5), sharex=True, sharey='row')
+    fig, axs = plt.subplots(1, 3, figsize=(16, 5), sharex=True, sharey=True)
 
     handles = []
     labels = []

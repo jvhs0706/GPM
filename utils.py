@@ -57,7 +57,7 @@ def GPM(q: torch.Tensor, w: torch.Tensor, sigma: float, beta: float, gamma: floa
     return q + sample_hclwe(sigma, w, beta, gamma)
 
 @torch.no_grad()
-def GPM_disginguishing_attack(q0: torch.Tensor, q1: torch.Tensor, w_unnormalized: torch.Tensor, sigma: float, beta: float, gamma: float):
+def GPM_disginguishing_attack(q0: torch.Tensor, q1: torch.Tensor, w_unnormalized: torch.Tensor, sigma: float, beta: float, gamma: float, l2: bool = False):
     w = w_unnormalized / torch.norm(w_unnormalized, p=2, dtype=torch.float64)
     space_along_w = (math.sqrt(2 * math.pi) * sigma) * (gamma / (beta**2 + gamma**2))
 
@@ -79,7 +79,10 @@ def GPM_disginguishing_attack(q0: torch.Tensor, q1: torch.Tensor, w_unnormalized
         b_hat = 1
 
     success = (b == b_hat)
-    return success, l2_error
+    if l2:
+        return success, l2_error
+    else:
+        return success
 
 def get_comp_epsilon(sensitivity, sigma, delta):
     """
