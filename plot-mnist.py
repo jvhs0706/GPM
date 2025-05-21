@@ -3,6 +3,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from utils import *
 import pandas as pd
+import os, sys
 
 # ---- Font Size Settings ----
 plt.rcParams.update({
@@ -31,7 +32,8 @@ def plot_success_rate(ax, df, eps_comp, clip_norm):
     ax.get_legend().remove()  # Remove individual legends
 
 if __name__ == '__main__':
-    df = pd.read_csv('logs/mnist-da-old.csv')
+    log_fn = sys.argv[1]
+    df = pd.read_csv(f'logs/{log_fn}.csv')
 
     fig, axs = plt.subplots(2, 4, figsize=(16, 8), sharex=True, sharey=True)
 
@@ -52,7 +54,7 @@ if __name__ == '__main__':
     # labels = [title_label + ':'] + labels
     # handles = [plt.Line2D([], [], linestyle='', label=title_label + ':')] + handles
 
-    labels = ['Not Converged', 'Converged (Accuracy=98.7%)']
+    labels = ['Not Converged', 'Converged (Accuracy=98.78%)']
 
     fig.legend(handles, labels, loc='lower center', ncol=len(labels), bbox_to_anchor=(0.5, -0.05))
 

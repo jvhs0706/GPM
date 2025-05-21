@@ -3,6 +3,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from utils import *
 import pandas as pd
+import os, sys
 
 # ---- Font Size Settings ----
 plt.rcParams.update({
@@ -33,7 +34,8 @@ def plot_success_rate(ax, df, num_bins):
     ax.get_legend().remove()  # Remove individual legends
 
 if __name__ == '__main__':
-    df = pd.read_csv('logs/hist-da.csv')
+    log_fn = sys.argv[1]
+    df = pd.read_csv(f'logs/{log_fn}.csv')
 
     fig, axs = plt.subplots(1, 3, figsize=(16, 5), sharex=True, sharey=True)
 
