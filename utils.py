@@ -52,6 +52,11 @@ def sample_hclwe(sigma: float, w_unnormalized: torch.Tensor, beta: float, gamma:
     return v_slice + mu
 
 @torch.no_grad()
+def GM(q: torch.Tensor, sigma: float):
+    assert q.ndim == 1, "q must be a 1D tensor."
+    return q + torch.normal(0, sigma, size=q.shape, dtype=q.dtype, device=q.device)
+
+@torch.no_grad()
 def GPM(q: torch.Tensor, w: torch.Tensor, sigma: float, beta: float, gamma: float):
     assert q.ndim == 1 and q.numel() == w.numel(), "q and w must be 1D tensors of the same size."
     return q + sample_hclwe(sigma, w, beta, gamma)

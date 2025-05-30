@@ -1,0 +1,34 @@
+source activate ~/.conda/envs/GPM_ENV
+
+# mkdir logs, if not exist
+mkdir -p logs
+
+# Delete the old logs/hist-da.csv, if exist
+LOG_FILE=logs/hist-da.csv
+if [ -f "$LOG_FILE" ]; then
+    rm -f "$LOG_FILE"
+fi
+
+# Create a new logs/hist-da.log, witt certain content
+echo "num_records,num_bins,beta,gamma,sigma,eps_comp,eps_actual,delta,GM_rt,GPM_rt" > $LOG_FILE
+
+EXP_SCRIPT="hist-rt.py"
+REPEAT=100
+DELTA=1e-10
+
+for num_records in 1e4 1e6 1e8; do
+    # Convert scientific notation to integer
+
+    for num_bins in 256 4096 65536; do
+        for eps in 0.125 0.25 0.5 1; do
+            for beta in 1e-5 1e-4 1e-3 1e-2 1e-1; do
+                # Run the python script with the parameters
+                python $EXP_SCRIPT --num_records $num_records --num_bins $num_bins --epsilon $eps --delta $DELTA --beta $beta --repeat $REPEAT >> $LOG_FILE
+            done
+        done
+    done
+done
+
+git add $LOG_FILE
+git commit -m "Add histogram results to $LOG_FILE"
+git push
