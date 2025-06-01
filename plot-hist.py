@@ -37,7 +37,7 @@ if __name__ == '__main__':
     log_fn = sys.argv[1]
     df = pd.read_csv(f'logs/{log_fn}.csv')
 
-    fig, axs = plt.subplots(1, 3, figsize=(16, 5), sharex=True, sharey=True)
+    fig, axs = plt.subplots(1, 3, figsize=(18, 4), sharex=True, sharey=True)
 
     handles = []
     labels = []

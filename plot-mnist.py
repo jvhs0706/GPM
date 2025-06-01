@@ -35,7 +35,7 @@ if __name__ == '__main__':
     log_fn = sys.argv[1]
     df = pd.read_csv(f'logs/{log_fn}.csv')
 
-    fig, axs = plt.subplots(2, 4, figsize=(16, 8), sharex=True, sharey=True)
+    fig, axs = plt.subplots(2, 4, figsize=(16, 6), sharex=True, sharey=True)
 
     handles = []
     labels = []
@@ -54,9 +54,9 @@ if __name__ == '__main__':
     # labels = [title_label + ':'] + labels
     # handles = [plt.Line2D([], [], linestyle='', label=title_label + ':')] + handles
 
-    labels = ['Not Converged', 'Converged (Accuracy=98.78%)']
+    labels = ['Not Converged', 'Converged (Accuracy=98.8%)']
 
-    fig.legend(handles, labels, loc='lower center', ncol=len(labels), bbox_to_anchor=(0.5, -0.05))
+    fig.legend(handles, labels, loc='lower center', ncol=len(labels), bbox_to_anchor=(0.5, -0.06))
 
 
     plt.tight_layout()

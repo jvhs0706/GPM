@@ -32,7 +32,7 @@ if __name__ == "__main__":
     beta_list = ['1e-1', '1e-2', '1e-3', '1e-4', '1e-5']
     line_styles = ['-', '--', '-.', ':', (0, (3, 5, 1, 5))]  # Solid, dashed, dash-dot, dotted, custom dash pattern
 
-    fig, axs = plt.subplots(1, len(gamma_list), figsize=(15, 4), sharex=True, sharey=True)
+    fig, axs = plt.subplots(1, len(gamma_list), figsize=(18, 4), sharex=True, sharey=True)
 
     for i, gamma in enumerate(gamma_list):
         for j, beta in enumerate(beta_list):

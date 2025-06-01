@@ -48,7 +48,7 @@ def plot_comp(ax, sensitivity, sigma, beta, gamma):
 if __name__ == "__main__":
     # Set parameters
     sensitivity = 1
-    sigma_list = [1, 4, 16, 64, 256]
+    sigma_list = [.25, 1, 4, 16, 64]
     beta_list = ['1e-3', '1e-5']
     gamma_list = ['1e2', '1e4']
     beta_gamma_pairs = [(beta, gamma) for beta in beta_list for gamma in gamma_list]
