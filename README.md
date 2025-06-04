@@ -1,3 +1,9 @@
+# GPM
+
+**IMPORTANT:** Attributions and licenses are given to parts of the code adopted from existing implementations. These do **not** identify the author(s).
+
+## Installation
+
 To install the environment:
 
 ```bash
@@ -147,10 +153,4 @@ dependencies:
       - typing-extensions==4.12.2
 ```
 
-Run the distinguishing attacks:
-
-```
-chmod +x *.sh
-conda activate GPM_ENV && nohup ./mnist-da.sh > logs/mnist-da-nohup.out &
-conda activate GPM_ENV && nohup ./cifar10-da.sh > logs/cifar10-da-nohup.out &
-```
+Use the `*.sh` files to run the experiments and reproduce the results. 
