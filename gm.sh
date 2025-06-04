@@ -1,17 +1,3 @@
-#!/bin/bash
-#SBATCH --time=2-23:59:59
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
-#SBATCH --gpus-per-task=1
-#SBATCH --cpus-per-task=32
-#SBATCH --mem=236511M
-#SBATCH --job-name=ShoiguGerasimovGdeSukaBojepripasy
-#SBATCH --output=logs/cifar10-da-%N-%j.out
-#SBATCH --error=logs/cifar10-da-%N-%j.err
-
-#SBATCH --mail-user=haochen.sun@uwaterloo.ca
-#SBATCH --mail-type=ALL
-
 source activate ~/.conda/envs/GPM_ENV
 
 # mkdir logs, if not exist
