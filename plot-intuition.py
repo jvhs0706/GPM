@@ -17,17 +17,19 @@ plt.rcParams.update({
     'figure.titlesize': 25
 })
 
-beta = 0.05
+beta = 0.1
 gamma = 2
 
+Z_RANGE=50
+
 # Define parameters
-mus = np.arange(-20, 20+1, 1) * (gamma / (beta**2 + gamma**2))  # Shifted means based on the Gaussian function
+mus = np.arange(-Z_RANGE, Z_RANGE+1, 1) * (gamma / (beta**2 + gamma**2))  # Shifted means based on the Gaussian function
 stds = np.full_like(mus, beta / np.sqrt(2 * np.pi * (beta**2 + gamma**2)), dtype=float)
 weights_unnormalized = np.exp(-mus**2 / (beta **2 + gamma **2))  # Unnormalized weights based on the Gaussian function
 weights = weights_unnormalized / np.sum(weights_unnormalized)  # Normalize to sum to 1
 
 # Create a range of x values
-x = np.linspace(-3, 3, 1000)  # Slightly wider range to accommodate the shift
+x = np.linspace(-5, 5, 1000)  # Slightly wider range to accommodate the shift
 
 # Compute the original weighted sum of Gaussians
 pdf_original = np.zeros_like(x)
@@ -41,7 +43,7 @@ for mu, std, weight in zip(mus, stds, weights):
     pdf_shifted += weight * norm.pdf(x, loc=mu + shift, scale=std)
 
 # Plot both
-plt.figure(figsize=(10, 5))
+plt.figure(figsize=(12, 5))
 plt.plot(x, pdf_original, label=r"$M_{\sigma,\mathbf{w},\beta,\gamma}\left(D\right)$")
 plt.plot(x, pdf_shifted, linestyle='--', label=r"$M_{\sigma,\mathbf{w},\beta,\gamma}\left(D'\right)$")
 plt.xlabel(r"\mathbf{w}^\top\mathbf{y}")

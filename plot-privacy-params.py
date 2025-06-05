@@ -54,7 +54,7 @@ if __name__ == "__main__":
     beta_gamma_pairs = [(beta, gamma) for beta in beta_list for gamma in gamma_list]
 
     # Create subplots
-    fig, axs = plt.subplots(4, 5, figsize=(24, 13), sharex=True, sharey=True)
+    fig, axs = plt.subplots(4, 5, figsize=(30, 14), sharex=True, sharey=True)
 
     for i, (beta, gamma) in enumerate(beta_gamma_pairs):
         for j, sigma in enumerate(sigma_list):
