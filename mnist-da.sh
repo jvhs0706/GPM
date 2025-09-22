@@ -38,10 +38,10 @@ for eps in 0.125 0.25 0.5 1; do
             # Run the python script with the parameters
             python $EXP_SCRIPT --batch_size $BATCH_SIZE --epsilon $eps --delta $DELTA --beta $beta --clip_norm $clip_norm --pretrained --repeat $REPEAT >> $LOG_FILE
             python $EXP_SCRIPT --batch_size $BATCH_SIZE --epsilon $eps --delta $DELTA --beta $beta --clip_norm $clip_norm --repeat $REPEAT >> $LOG_FILE
+            git add $LOG_FILE
+            git commit -m "Add mnist results to $LOG_FILE, with eps=$eps, beta=$beta, clip_norm=$clip_norm"
+            git push
         done
     done
 done
 
-git add $LOG_FILE
-git commit -m "Add mnist results to $LOG_FILE"
-git push
