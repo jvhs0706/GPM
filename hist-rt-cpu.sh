@@ -2,7 +2,6 @@
 #SBATCH --time=2-23:59:59
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --gpus-per-task=1
 #SBATCH --cpus-per-task=32
 #SBATCH --mem=236511M
 #SBATCH --job-name=GPM
