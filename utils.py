@@ -49,7 +49,7 @@ def sample_hclwe(sigma: float, w_unnormalized: torch.Tensor, beta: float, gamma:
 
     v_slice = v_w_perp + v_w * beta / math.sqrt(beta**2 + gamma**2)
 
-    z = sample_dgauss( (beta**2 + gamma**2) / (2 * math.pi))
+    z = DGIS(math.sqrt((beta**2 + gamma**2) / (2 * math.pi)), precision='dp')() # a number generator for the discrete Gaussian distribution with the right parameter, using the sage implementation, DG() will return a number sampled from the distribution each time it's called
     mu = (math.sqrt(2 * math.pi) * sigma) * (gamma * z / (beta**2 + gamma**2)) * w 
     
     return v_slice + mu
