@@ -30,10 +30,12 @@ conda env create --file env-start.yaml && conda activate GPM_ENV
 
 ### Step 2: Run the Reproduction Scripts
 
-First, grant execution permissions:
+First, grant execution permissions and download data:
 
 ```bash
 chmod +x ./*.sh
+cd ./mnist && python __init__.py && cd ../
+cd ./cifar10_models && chmod +x *.sh && ./download_weights.sh && cd ../
 ```
 
 Then execute the following scripts from the repository root directory (where this `README.md` is located):
@@ -44,6 +46,7 @@ Then execute the following scripts from the repository root directory (where thi
 ./cifar10-da.sh
 ./gm.sh
 ./hist-rt.sh
+./hist-rt-cpu.sh
 ```
 
 For systems using **SLURM**, submit the scripts as batch jobs instead:
@@ -54,6 +57,7 @@ sbatch mnist-da-new.sh
 sbatch cifar10-da.sh
 sbatch gm.sh
 sbatch hist-rt.sh
+sbatch hist-rt-cpu.sh
 ```
 
 ### Step 3: Generate the Plots

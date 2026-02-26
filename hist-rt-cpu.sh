@@ -20,7 +20,7 @@ fi
 mkdir -p logs
 
 # Delete the old logs/hist-da.csv, if exist
-LOG_FILE=logs/hist-rt.csv
+LOG_FILE=logs/hist-rt-cpu.csv
 if [ -f "$LOG_FILE" ]; then
     rm -f "$LOG_FILE"
 fi
@@ -37,8 +37,8 @@ for num_bins in 65536 4096 256; do
     for eps in 0.125 0.25 0.5 1; do
         for beta in 1e-5 1e-4 1e-3 1e-2 1e-1; do
             # Run the python script with the parameters
-            python $EXP_SCRIPT --num_records $NUM_RECORDS --num_bins $num_bins --epsilon $eps --delta $DELTA --beta $beta --repeat $REPEAT --device cuda:0 >> $LOG_FILE
-            python $EXP_SCRIPT --num_records $NUM_RECORDS --num_bins $num_bins --epsilon $eps --delta $DELTA --beta $beta --repeat $REPEAT --gpm --device cuda:0 >> $LOG_FILE
+            python $EXP_SCRIPT --num_records $NUM_RECORDS --num_bins $num_bins --epsilon $eps --delta $DELTA --beta $beta --repeat $REPEAT --device cpu >> $LOG_FILE
+            python $EXP_SCRIPT --num_records $NUM_RECORDS --num_bins $num_bins --epsilon $eps --delta $DELTA --beta $beta --repeat $REPEAT --gpm --device cpu >> $LOG_FILE
             git add $LOG_FILE
             git commit -m "Add histogram noise sampling time results to $LOG_FILE, with $num_bins bins, eps=$eps, beta=$beta."
             git push

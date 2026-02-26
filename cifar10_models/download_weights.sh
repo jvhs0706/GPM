@@ -7,5 +7,6 @@ else
   echo "Weights already downloaded."
 fi
 
-unzip $ZIP_FILE_NAME
+# unzip, do not overwrite existing files, and remove the zip file after unzipping
+unzip -n $ZIP_FILE_NAME
 rm $ZIP_FILE_NAME
