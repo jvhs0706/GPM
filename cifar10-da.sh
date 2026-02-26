@@ -9,7 +9,12 @@
 #SBATCH --output=logs/cifar10-da-%N-%j.out
 #SBATCH --error=logs/cifar10-da-%N-%j.err
 
-source activate ~/.conda/envs/GPM_ENV
+# Ensure current environment is GPM_ENV
+CURRENT_ENV=$(conda info --json | jq -r '.active_prefix_name')
+if [ "$CURRENT_ENV" != "GPM_ENV" ]; then
+    echo "Please activate the GPM_ENV conda environment before running this script."
+    exit 1
+fi
 
 # mkdir logs, if not exist
 mkdir -p logs
