@@ -38,26 +38,10 @@ cd ./mnist && python __init__.py && cd ../
 cd ./cifar10_models && chmod +x *.sh && ./download_weights.sh && cd ../
 ```
 
-Then run the following scripts from the repository root directory (where this `README.md` is located):
+Then run the following script from the repository root directory (where this `README.md` is located):
 
 ```bash
-./hist-da.sh
-./mnist-da-new.sh
-./cifar10-da.sh
-./gm.sh
-./hist-rt.sh
-./hist-rt-cpu.sh
-```
-
-If you are using **SLURM**, submit these scripts as batch jobs instead:
-
-```bash
-sbatch hist-da.sh
-sbatch mnist-da-new.sh
-sbatch cifar10-da.sh
-sbatch gm.sh
-sbatch hist-rt.sh
-sbatch hist-rt-cpu.sh
+./run.sh
 ```
 
 ### Step 3: Generate the Plots
