@@ -8,7 +8,7 @@ Follow the steps below to reproduce the experimental results.
 
 ### Step 0: Fork and Star This Repository
 
-This repository is designed to automatically generate raw experimental logs. If you do not fork the repository, the code may attempt to push logs to the original repository, which could fail or interfere with existing data.
+This repository is set up to automatically generate raw experimental logs. If you do not fork it, the code may attempt to push logs to the original repository, which could fail or interfere with existing data.
 
 To get started:
 
@@ -30,7 +30,7 @@ conda env create --file env-start.yaml && conda activate GPM_ENV
 
 ### Step 2: Run the Reproduction Scripts
 
-First, grant execution permissions and download data:
+First, grant execution permissions and download the data:
 
 ```bash
 chmod +x ./*.sh
@@ -38,7 +38,7 @@ cd ./mnist && python __init__.py && cd ../
 cd ./cifar10_models && chmod +x *.sh && ./download_weights.sh && cd ../
 ```
 
-Then execute the following scripts from the repository root directory (where this `README.md` is located):
+Then run the following scripts from the repository root directory (where this `README.md` is located):
 
 ```bash
 ./hist-da.sh
@@ -49,7 +49,7 @@ Then execute the following scripts from the repository root directory (where thi
 ./hist-rt-cpu.sh
 ```
 
-For systems using **SLURM**, submit the scripts as batch jobs instead:
+If you are using **SLURM**, submit these scripts as batch jobs instead:
 
 ```bash
 sbatch hist-da.sh

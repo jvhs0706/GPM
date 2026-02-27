@@ -26,7 +26,7 @@ Please check the box that applies and provide details as needed.
 **If you observed any differences or anomalies, please describe them below:**  
 > _e.g., minor deviations in accuracy, runtime, or resource usage._
 
-_(Note: Differences across hardware and environments are common. Please focus on qualitative trends and reproducibility within expected variation. In particular, runtime can be up to 10× slower under high system load.)_
+_(Note: Differences across hardware and environments are common. Please focus on qualitative trends and reproducibility within expected variation. In particular, runtime can be up to 10× slower under high system load, which at one point almost made me worry the paper was non-reproducible.)_
 
 ## 4. Additional Comments (Optional)
 
