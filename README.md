@@ -33,9 +33,7 @@ conda env create --file env-start.yaml && conda activate GPM_ENV
 First, grant execution permissions and download the data:
 
 ```bash
-chmod +x ./*.sh
-cd ./mnist && python __init__.py && cd ../
-cd ./cifar10_models && chmod +x *.sh && ./download_weights.sh && cd ../
+chmod +x ./*.sh && cd ./mnist && python __init__.py && cd ../cifar10_models && chmod +x *.sh && ./download_weights.sh && cd ../
 ```
 
 Then run the following script from the repository root directory (where this `README.md` is located):
