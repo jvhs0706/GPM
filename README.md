@@ -1,4 +1,4 @@
-# GPM: The Gaussian Pancake Mechanism for Planting Undetectable Backdoors in Differential Privacy
+# [ACM SIGMOD 2026] GPM: The Gaussian Pancake Mechanism for Planting Undetectable Backdoors in Differential Privacy
 
 Welcome to the official implementation of [GPM](https://arxiv.org/abs/2509.23834).
 
