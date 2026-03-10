@@ -90,7 +90,7 @@ if __name__ == '__main__':
     handles = new_handles
     labels = new_labels
     # print(labels)
-    fig.legend(handles, labels, loc='lower center', ncol=(len(labels) + 1)//2, bbox_to_anchor=(0.5, -0.12))
+    fig.legend(handles, labels, loc='lower center', ncol=(len(labels) + 1)//2, bbox_to_anchor=(0.5, -0.135))
     
 
 

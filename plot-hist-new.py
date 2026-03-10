@@ -15,7 +15,7 @@ plt.rcParams.update({
     'axes.titlesize': 30,
     'xtick.labelsize': 25,
     'ytick.labelsize': 25,
-    'legend.fontsize': 20,
+    'legend.fontsize': 30,
     'figure.titlesize': 30,
     'mathtext.fontset': 'stix',
     'font.family': 'serif',
@@ -56,7 +56,7 @@ if __name__ == '__main__':
     log_fn = sys.argv[1]
     df = pd.read_csv(f'logs/{log_fn}.csv')
 
-    fig, axs = plt.subplots(3, 4, figsize=(24, 8), sharex=True, sharey=True)
+    fig, axs = plt.subplots(3, 4, figsize=(24, 10), sharex=True, sharey=True)
 
     handles = []
     labels = []
@@ -76,7 +76,7 @@ if __name__ == '__main__':
     # labels = [title_label + ':'] + labels
     # handles = [plt.Line2D([], [], linestyle='', label=title_label + ':')] + handles
 
-    fig.legend(handles, labels, loc='lower center', ncol=len(labels), bbox_to_anchor=(0.5, -0.075))
+    fig.legend(handles, labels, loc='lower center', ncol=len(labels), bbox_to_anchor=(0.5, -0.07))
 
 
     plt.tight_layout()

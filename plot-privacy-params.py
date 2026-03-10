@@ -8,13 +8,13 @@ sns.set_style('whitegrid')  # or 'darkgrid', 'white', 'dark', etc.
 
 # ---- Font Size Settings ----
 plt.rcParams.update({
-    'font.size': 25,            # base font size
-    'axes.labelsize': 30,       # x/y labels
-    'axes.titlesize': 30,
-    'xtick.labelsize': 25,
-    'ytick.labelsize': 25,
-    'legend.fontsize': 20,
-    'figure.titlesize': 30,
+    'font.size': 30,            # base font size
+    'axes.labelsize': 35,       # x/y labels
+    'axes.titlesize': 35,
+    'xtick.labelsize': 30,
+    'ytick.labelsize': 30,
+    'legend.fontsize': 35,
+    'figure.titlesize': 40,
     'mathtext.fontset': 'stix',
     'font.family': 'serif',
     'font.serif': ['Times New Roman'],
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     beta_gamma_pairs = [(beta, gamma) for beta in beta_list for gamma in gamma_list]
 
     # Create subplots
-    fig, axs = plt.subplots(4, 5, figsize=(32, 16), sharex=True, sharey=True)
+    fig, axs = plt.subplots(4, 5, figsize=(32, 18), sharex=True, sharey=True)
 
     for i, (beta, gamma) in enumerate(beta_gamma_pairs):
         for j, sigma in enumerate(sigma_list):
@@ -82,7 +82,7 @@ if __name__ == "__main__":
 
     # Add global legend
     handles, labels = axs[0, 0].get_legend_handles_labels()
-    fig.legend(handles, labels, loc='lower center', ncol=3, bbox_to_anchor=(0.5, -0.04))
+    fig.legend(handles, labels, loc='lower center', ncol=3, bbox_to_anchor=(0.5, -0.035))
 
     # Save the figure
     plt.tight_layout()
