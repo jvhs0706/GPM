@@ -8,12 +8,12 @@ sns.set_style('whitegrid')  # or 'darkgrid', 'white', 'dark', etc.
 
 # ---- Font Size Settings ----
 plt.rcParams.update({
-    'font.size': 20,            # base font size
-    'axes.labelsize': 25,       # x/y labels
-    'axes.titlesize': 25,
-    'xtick.labelsize': 20,
-    'ytick.labelsize': 20,
-    'legend.fontsize': 25,
+    'font.size': 25,            # base font size
+    'axes.labelsize': 30,       # x/y labels
+    'axes.titlesize': 30,
+    'xtick.labelsize': 25,
+    'ytick.labelsize': 25,
+    'legend.fontsize': 20,
     'figure.titlesize': 30,
     'mathtext.fontset': 'stix',
     'font.family': 'serif',
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     beta_gamma_pairs = [(beta, gamma) for beta in beta_list for gamma in gamma_list]
 
     # Create subplots
-    fig, axs = plt.subplots(4, 5, figsize=(32, 14), sharex=True, sharey=True)
+    fig, axs = plt.subplots(4, 5, figsize=(32, 16), sharex=True, sharey=True)
 
     for i, (beta, gamma) in enumerate(beta_gamma_pairs):
         for j, sigma in enumerate(sigma_list):

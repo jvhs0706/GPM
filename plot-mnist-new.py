@@ -10,12 +10,12 @@ sns.set_style('whitegrid')  # or 'darkgrid', 'white', 'dark', etc.
 
 # ---- Font Size Settings ----
 plt.rcParams.update({
-    'font.size': 12,
-    'axes.labelsize': 15,
-    'axes.titlesize': 15,
-    'xtick.labelsize': 12,
-    'ytick.labelsize': 12,
-    'legend.fontsize': 15,
+    'font.size': 18,
+    'axes.labelsize': 20,
+    'axes.titlesize': 20,
+    'xtick.labelsize': 18,
+    'ytick.labelsize': 18,
+    'legend.fontsize': 20,
     'figure.titlesize': 20,
     'mathtext.fontset': 'stix',
     'font.family': 'serif',
